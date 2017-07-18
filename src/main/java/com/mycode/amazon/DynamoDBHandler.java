@@ -122,7 +122,6 @@ public class DynamoDBHandler {
         Map<String, KeysAndAttributes> unprocessed = null;
 
         do{
-            // We're supposed to have only one table: allprod.
             for (String currTableName : outcome.getTableItems().keySet()) {
 
                 List<Item> items = outcome.getTableItems().get(currTableName);
