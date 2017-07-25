@@ -11,4 +11,7 @@ This kind of approach is quick, simple, ideal for small-scale projects. No distr
 
 Just copy/paste and replace with real login credentials.
 
+Updated: 25/07/2017
+Exposing the "client" objects is one thing, using them is another thing. So I added some examples.
+
 Have fun!
