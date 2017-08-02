@@ -14,4 +14,7 @@ Just copy/paste and replace with real login credentials.
 Updated: 25/07/2017
 Exposing the "client" objects is one thing, using them is another thing. So I added some examples.
 
+Updated: 02/08/2017
+Example on invoking javascript code inside MongoDB Server. Like copy/paste javascript into MongoDB Console.
+
 Have fun!

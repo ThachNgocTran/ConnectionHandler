@@ -2,6 +2,10 @@ package com.mycode.testing;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -9,6 +13,8 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mycode.mongodb.MongoDBHandler;
 import org.apache.http.util.Args;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -20,6 +26,9 @@ import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
 public class MongoDBTest {
+
+    private static final String CLASS_NAME = MongoDBTest.class.getSimpleName();
+    private static final Logger LOGGER = LogManager.getLogger(CLASS_NAME);
 
     /*
     *** Context ***
@@ -109,5 +118,29 @@ public class MongoDBTest {
         }
 
         return res;
+    }
+
+    /*
+    We can write a long javascript code in a file (*.js), load it into "alllines", and execute them
+    inside MongoDB Server, exactly the same as we open the file manually, copy/paste the code into
+    MongoDB Console!
+     */
+    public static void testExecuteJavascriptCode(List<String> alllines){
+
+        String strMerging = String.join("\n", alllines);
+        BasicDBObject commMerging = new BasicDBObject();
+        commMerging.put("eval", String.format("function(){%s}", strMerging));
+
+        MongoDatabase db = MongoDBHandler.getInstance().getMongoClient().getDatabase("databaseName");
+        Document resultMerging = db.runCommand(commMerging);
+
+        LOGGER.info("Result from function call:");
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonParser jp = new JsonParser();
+        JsonElement je = jp.parse(resultMerging.toJson());
+        String prettyJsonString = gson.toJson(je);
+
+        LOGGER.info(prettyJsonString);
     }
 }
